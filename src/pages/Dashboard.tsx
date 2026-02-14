@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { companyList, totalProblems, getDifficultyCount } from "@/lib/data";
 import { useProgressCtx } from "@/components/AppLayout";
 import { Link } from "react-router-dom";
-import { Flame, Target, TrendingUp, BookOpen } from "lucide-react";
+import { Flame, Target, TrendingUp, BookOpen, ExternalLink, Calendar } from "lucide-react";
 import {
   PieChart,
   Pie,
@@ -12,9 +12,28 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
+import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+interface DailyChallenge {
+  questionTitle: string;
+  questionLink: string;
+  difficulty: string;
+  date: string;
+}
 
 export default function Dashboard() {
   const { progress, totalSolved, getSolvedCount } = useProgressCtx();
+  const [daily, setDaily] = useState<DailyChallenge | null>(null);
+  const [dailyLoading, setDailyLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("https://leetcode-api-pied.vercel.app/daily")
+      .then((r) => r.json())
+      .then((data) => setDaily(data))
+      .catch(() => {})
+      .finally(() => setDailyLoading(false));
+  }, []);
 
   const allProblems = companyList.flatMap((c) => c.problems);
   const easySolved = Object.keys(progress.solved).filter((key) => {
@@ -59,6 +78,45 @@ export default function Dashboard() {
           Track your LeetCode interview prep across {companyList.length} companies
         </p>
       </div>
+
+      {/* Daily Challenge */}
+      {dailyLoading ? (
+        <Skeleton className="h-20 w-full rounded-lg" />
+      ) : daily ? (
+        <a
+          href={`https://leetcode.com${daily.questionLink}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block"
+        >
+          <Card className="border-primary/30 bg-primary/5 hover:border-primary/60 transition-colors cursor-pointer">
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <Calendar className="h-5 w-5 text-primary shrink-0" />
+                <div>
+                  <p className="text-xs text-muted-foreground font-medium">Today's Daily Challenge</p>
+                  <p className="font-semibold">{daily.questionTitle}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge
+                  variant="secondary"
+                  className={
+                    daily.difficulty === "Easy"
+                      ? "text-easy"
+                      : daily.difficulty === "Medium"
+                      ? "text-medium"
+                      : "text-hard"
+                  }
+                >
+                  {daily.difficulty}
+                </Badge>
+                <ExternalLink className="h-4 w-4 text-muted-foreground" />
+              </div>
+            </CardContent>
+          </Card>
+        </a>
+      ) : null}
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
