@@ -5,6 +5,7 @@ import {
   Download,
   Upload,
   Code2,
+  LogOut,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -22,6 +23,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { Separator } from "@/components/ui/separator";
 
 const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
@@ -36,6 +39,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const { user, signOut } = useAuth();
 
   return (
     <Sidebar className="border-r border-border">
@@ -44,7 +48,12 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           <Code2 className="h-6 w-6 text-primary" />
           <span className="text-lg font-bold tracking-tight">LeetTracker</span>
         </div>
+        {user && (
+          <p className="text-xs text-muted-foreground mt-1 truncate">{user.email}</p>
+        )}
       </SidebarHeader>
+
+      <Separator />
 
       <SidebarContent>
         <SidebarGroup>
@@ -104,8 +113,12 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className="p-4 space-y-2">
         <ThemeToggle />
+        <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground" onClick={signOut}>
+          <LogOut className="h-4 w-4 mr-2" />
+          Sign Out
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );

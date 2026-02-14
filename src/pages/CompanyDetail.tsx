@@ -16,7 +16,9 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, ExternalLink, Search, StickyNote, FileText } from "lucide-react";
+import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+
+const PAGE_SIZE = 100;
 
 export default function CompanyDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,6 +30,7 @@ export default function CompanyDetail() {
   const [status, setStatus] = useState<string>("all");
   const [topic, setTopic] = useState<string>("all");
   const [noteModal, setNoteModal] = useState<Problem | null>(null);
+  const [page, setPage] = useState(1);
 
   const topics = useMemo(() => company ? getAllTopics(company.problems) : [], [company]);
 
@@ -48,6 +51,12 @@ export default function CompanyDetail() {
     });
   }, [company, search, difficulty, status, topic, isSolved]);
 
+  // Reset page when filters change
+  useMemo(() => setPage(1), [search, difficulty, status, topic]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
   if (!company) {
     return (
       <div className="text-center py-20">
@@ -58,9 +67,9 @@ export default function CompanyDetail() {
   }
 
   const diffBadge = (d: string) => {
-    if (d === "easy") return <Badge className="bg-easy/15 text-easy border-easy/30 hover:bg-easy/25">Easy</Badge>;
-    if (d === "medium") return <Badge className="bg-medium/15 text-medium border-medium/30 hover:bg-medium/25">Medium</Badge>;
-    return <Badge className="bg-hard/15 text-hard border-hard/30 hover:bg-hard/25">Hard</Badge>;
+    if (d === "easy") return <Badge className="bg-easy/15 text-easy border-easy/30 hover:bg-easy/25 text-xs">Easy</Badge>;
+    if (d === "medium") return <Badge className="bg-medium/15 text-medium border-medium/30 hover:bg-medium/25 text-xs">Medium</Badge>;
+    return <Badge className="bg-hard/15 text-hard border-hard/30 hover:bg-hard/25 text-xs">Hard</Badge>;
   };
 
   return (
@@ -69,14 +78,16 @@ export default function CompanyDetail() {
         <ArrowLeft className="h-4 w-4" /> Back to companies
       </Link>
 
-      <Card>
-        <CardHeader><CardTitle className="text-2xl">{company.name}</CardTitle></CardHeader>
+      <Card className="border-border/50">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-2xl font-bold">{company.name}</CardTitle>
+        </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap items-center gap-4 mb-4">
-            <span className="text-sm text-muted-foreground">{solved} / {company.problem_count} solved</span>
-            <Badge variant="outline" className="text-easy border-easy/40">Easy: {easy}</Badge>
-            <Badge variant="outline" className="text-medium border-medium/40">Medium: {med}</Badge>
-            <Badge variant="outline" className="text-hard border-hard/40">Hard: {hard}</Badge>
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <span className="text-sm font-medium">{solved} / {company.problem_count} solved</span>
+            <Badge variant="outline" className="text-easy border-easy/40 text-xs">Easy: {easy}</Badge>
+            <Badge variant="outline" className="text-medium border-medium/40 text-xs">Medium: {med}</Badge>
+            <Badge variant="outline" className="text-hard border-hard/40 text-xs">Hard: {hard}</Badge>
           </div>
           <Progress value={(solved / company.problem_count) * 100} className="h-2" />
         </CardContent>
@@ -88,7 +99,7 @@ export default function CompanyDetail() {
           <Input placeholder="Search problems..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
         </div>
         <Select value={difficulty} onValueChange={setDifficulty}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Difficulty" /></SelectTrigger>
+          <SelectTrigger className="w-[130px]"><SelectValue placeholder="Difficulty" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="easy">Easy</SelectItem>
@@ -97,7 +108,7 @@ export default function CompanyDetail() {
           </SelectContent>
         </Select>
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="w-[140px]"><SelectValue placeholder="Status" /></SelectTrigger>
+          <SelectTrigger className="w-[130px]"><SelectValue placeholder="Status" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="solved">Solved</SelectItem>
@@ -105,7 +116,7 @@ export default function CompanyDetail() {
           </SelectContent>
         </Select>
         <Select value={topic} onValueChange={setTopic}>
-          <SelectTrigger className="w-[180px]"><SelectValue placeholder="Topic" /></SelectTrigger>
+          <SelectTrigger className="w-[160px]"><SelectValue placeholder="Topic" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Topics</SelectItem>
             {topics.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
@@ -113,45 +124,85 @@ export default function CompanyDetail() {
         </Select>
       </div>
 
-      <Card>
+      {/* Pagination header */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} of {filtered.length} problems
+          </p>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            {Array.from({ length: Math.min(totalPages, 7) }, (_, i) => {
+              let pageNum: number;
+              if (totalPages <= 7) {
+                pageNum = i + 1;
+              } else if (page <= 4) {
+                pageNum = i + 1;
+              } else if (page >= totalPages - 3) {
+                pageNum = totalPages - 6 + i;
+              } else {
+                pageNum = page - 3 + i;
+              }
+              return (
+                <Button
+                  key={pageNum}
+                  variant={page === pageNum ? "default" : "outline"}
+                  size="icon"
+                  className="h-8 w-8 text-xs"
+                  onClick={() => setPage(pageNum)}
+                >
+                  {pageNum}
+                </Button>
+              );
+            })}
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      <Card className="border-border/50 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-muted/30">
               <TableHead className="w-12">Done</TableHead>
               <TableHead>Problem</TableHead>
               <TableHead className="w-24">Difficulty</TableHead>
               <TableHead className="hidden md:table-cell">Topics</TableHead>
-              <TableHead className="w-20 text-right">Notes</TableHead>
+              <TableHead className="w-16 text-right">Notes</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((p) => {
+            {paginated.map((p) => {
               const done = isSolved(company.slug, p.slug);
               const hasNote = !!getNote(company.slug, p.slug);
               return (
-                <TableRow key={p.slug} className={done ? "opacity-60" : ""}>
+                <TableRow key={p.slug} className={`transition-colors ${done ? "opacity-50 bg-muted/10" : "hover:bg-muted/20"}`}>
                   <TableCell>
                     <Checkbox checked={done} onCheckedChange={() => toggleSolved(company.slug, p.slug)} />
                   </TableCell>
                   <TableCell>
                     <a href={p.url} target="_blank" rel="noopener noreferrer"
-                      className={`font-medium hover:text-primary transition-colors inline-flex items-center gap-1.5 ${done ? "line-through" : ""}`}>
-                      {p.title}<ExternalLink className="h-3 w-3 opacity-50" />
+                      className={`font-medium hover:text-primary transition-colors inline-flex items-center gap-1.5 text-sm ${done ? "line-through text-muted-foreground" : ""}`}>
+                      {p.title}<ExternalLink className="h-3 w-3 opacity-40" />
                     </a>
                   </TableCell>
                   <TableCell>{diffBadge(p.difficulty)}</TableCell>
                   <TableCell className="hidden md:table-cell">
                     <div className="flex flex-wrap gap-1">
                       {p.topics && p.topics.split(", ").slice(0, 3).map((t) => (
-                        <Badge key={t} variant="secondary" className="text-xs">{t}</Badge>
+                        <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">{t}</Badge>
                       ))}
                       {p.topics && p.topics.split(", ").length > 3 && (
-                        <Badge variant="secondary" className="text-xs">+{p.topics.split(", ").length - 3}</Badge>
+                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">+{p.topics.split(", ").length - 3}</Badge>
                       )}
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setNoteModal(p)}>
+                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setNoteModal(p)}>
                       {hasNote ? <FileText className="h-4 w-4 text-primary" /> : <StickyNote className="h-4 w-4 text-muted-foreground" />}
                     </Button>
                   </TableCell>
@@ -161,9 +212,26 @@ export default function CompanyDetail() {
           </TableBody>
         </Table>
         {filtered.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">No problems match your filters</div>
+          <div className="text-center py-8 text-muted-foreground text-sm">No problems match your filters</div>
         )}
       </Card>
+
+      {/* Bottom pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+          </p>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => { setPage(page - 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+              <ChevronLeft className="h-4 w-4 mr-1" /> Previous
+            </Button>
+            <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => { setPage(page + 1); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+              Next <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {noteModal && (
         <NoteModal
