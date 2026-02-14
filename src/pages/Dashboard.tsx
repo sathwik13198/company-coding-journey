@@ -16,10 +16,13 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DailyChallenge {
-  questionTitle: string;
-  questionLink: string;
-  difficulty: string;
   date: string;
+  link: string;
+  question: {
+    title: string;
+    titleSlug: string;
+    difficulty: string;
+  };
 }
 
 export default function Dashboard() {
@@ -84,7 +87,7 @@ export default function Dashboard() {
         <Skeleton className="h-20 w-full rounded-lg" />
       ) : daily ? (
         <a
-          href={`https://leetcode.com${daily.questionLink}`}
+          href={`https://leetcode.com${daily.link}`}
           target="_blank"
           rel="noopener noreferrer"
           className="block"
@@ -95,21 +98,21 @@ export default function Dashboard() {
                 <Calendar className="h-5 w-5 text-primary shrink-0" />
                 <div>
                   <p className="text-xs text-muted-foreground font-medium">Today's Daily Challenge</p>
-                  <p className="font-semibold">{daily.questionTitle}</p>
+                  <p className="font-semibold">{daily.question.title}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <Badge
                   variant="secondary"
                   className={
-                    daily.difficulty === "Easy"
+                    daily.question.difficulty === "Easy"
                       ? "text-easy"
-                      : daily.difficulty === "Medium"
+                      : daily.question.difficulty === "Medium"
                       ? "text-medium"
                       : "text-hard"
                   }
                 >
-                  {daily.difficulty}
+                  {daily.question.difficulty}
                 </Badge>
                 <ExternalLink className="h-4 w-4 text-muted-foreground" />
               </div>
