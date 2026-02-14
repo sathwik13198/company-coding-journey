@@ -1,5 +1,6 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { UserProgress, DEFAULT_PROGRESS, ProblemNote } from "@/lib/types";
+import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "leetcode-tracker-progress";
 
@@ -11,16 +12,86 @@ function loadProgress(): UserProgress {
   return { ...DEFAULT_PROGRESS };
 }
 
-function saveProgress(p: UserProgress) {
+function saveLocal(p: UserProgress) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
 }
 
 export function useProgress() {
   const [progress, setProgress] = useState<UserProgress>(loadProgress);
+  const syncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const userIdRef = useRef<string | null>(null);
 
+  // Load from cloud on mount if logged in
   useEffect(() => {
-    saveProgress(progress);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        userIdRef.current = session.user.id;
+        loadFromCloud(session.user.id);
+      }
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        userIdRef.current = session.user.id;
+        loadFromCloud(session.user.id);
+      } else {
+        userIdRef.current = null;
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadFromCloud = async (userId: string) => {
+    const { data } = await supabase
+      .from("user_progress")
+      .select("progress_data")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (data?.progress_data) {
+      const cloudProgress = { ...DEFAULT_PROGRESS, ...(data.progress_data as unknown as UserProgress) };
+      // Merge: take the one with more solved problems
+      const localProgress = loadProgress();
+      const merged = Object.keys(cloudProgress.solved).length >= Object.keys(localProgress.solved).length
+        ? cloudProgress : localProgress;
+      setProgress(merged);
+      saveLocal(merged);
+    }
+  };
+
+  // Save to localStorage + debounced cloud sync
+  useEffect(() => {
+    saveLocal(progress);
+
+    if (syncTimer.current) clearTimeout(syncTimer.current);
+    syncTimer.current = setTimeout(() => {
+      if (userIdRef.current) {
+        syncToCloud(userIdRef.current, progress);
+      }
+    }, 2000);
+
+    return () => { if (syncTimer.current) clearTimeout(syncTimer.current); };
   }, [progress]);
+
+  const syncToCloud = async (userId: string, p: UserProgress) => {
+    const { data: existing } = await supabase
+      .from("user_progress")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (existing) {
+      await supabase
+        .from("user_progress")
+        .update({ progress_data: JSON.parse(JSON.stringify(p)) })
+        .eq("user_id", userId);
+    } else {
+      await supabase
+        .from("user_progress")
+        .insert([{ user_id: userId, progress_data: JSON.parse(JSON.stringify(p)) }]);
+    }
+  };
 
   const makeKey = (companySlug: string, problemSlug: string) =>
     `${companySlug}::${problemSlug}`;
