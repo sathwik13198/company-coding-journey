@@ -6,6 +6,7 @@ import {
   Upload,
   Code2,
   LogOut,
+  User,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -30,6 +31,7 @@ const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Companies", url: "/companies", icon: Building2 },
   { title: "Progress", url: "/progress", icon: BarChart3 },
+  { title: "Profile", url: "/profile", icon: User },
 ];
 
 interface AppSidebarProps {

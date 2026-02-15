@@ -38,3 +38,15 @@ export const DEFAULT_PROGRESS: UserProgress = {
   streak: 0,
   lastSolvedDate: "",
 };
+
+export interface SimilarProblem {
+  title: string;
+  title_slug: string;
+  difficulty: "Easy" | "Medium" | "Hard";
+  url: string;
+}
+
+export interface SimilarProblemsResponse {
+  problem: string;
+  similar: SimilarProblem[];
+}

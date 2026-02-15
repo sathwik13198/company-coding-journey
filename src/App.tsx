@@ -11,6 +11,7 @@ import Companies from "@/pages/Companies";
 import CompanyDetail from "@/pages/CompanyDetail";
 import ProgressPage from "@/pages/ProgressPage";
 import Auth from "@/pages/Auth";
+import Profile from "@/pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/companies" element={<Companies />} />
               <Route path="/companies/:slug" element={<CompanyDetail />} />
               <Route path="/progress" element={<ProgressPage />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

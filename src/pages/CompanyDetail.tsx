@@ -16,7 +16,9 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { SimilarProblems } from "@/components/SimilarProblems";
+import { AIAnalysis } from "@/components/AIAnalysis";
 
 const PAGE_SIZE = 100;
 
@@ -176,39 +178,18 @@ export default function CompanyDetail() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginated.map((p) => {
-              const done = isSolved(company.slug, p.slug);
-              const hasNote = !!getNote(company.slug, p.slug);
-              return (
-                <TableRow key={p.slug} className={`transition-colors ${done ? "opacity-50 bg-muted/10" : "hover:bg-muted/20"}`}>
-                  <TableCell>
-                    <Checkbox checked={done} onCheckedChange={() => toggleSolved(company.slug, p.slug)} />
-                  </TableCell>
-                  <TableCell>
-                    <a href={p.url} target="_blank" rel="noopener noreferrer"
-                      className={`font-medium hover:text-primary transition-colors inline-flex items-center gap-1.5 text-sm ${done ? "line-through text-muted-foreground" : ""}`}>
-                      {p.title}<ExternalLink className="h-3 w-3 opacity-40" />
-                    </a>
-                  </TableCell>
-                  <TableCell>{diffBadge(p.difficulty)}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <div className="flex flex-wrap gap-1">
-                      {p.topics && p.topics.split(", ").slice(0, 3).map((t) => (
-                        <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">{t}</Badge>
-                      ))}
-                      {p.topics && p.topics.split(", ").length > 3 && (
-                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">+{p.topics.split(", ").length - 3}</Badge>
-                      )}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setNoteModal(p)}>
-                      {hasNote ? <FileText className="h-4 w-4 text-primary" /> : <StickyNote className="h-4 w-4 text-muted-foreground" />}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {paginated.map((p) => (
+              <ProblemRow
+                key={p.slug}
+                problem={p}
+                companySlug={company.slug}
+                isSolved={isSolved}
+                toggleSolved={toggleSolved}
+                getNote={getNote}
+                diffBadge={diffBadge}
+                setNoteModal={setNoteModal}
+              />
+            ))}
           </TableBody>
         </Table>
         {filtered.length === 0 && (
@@ -244,5 +225,82 @@ export default function CompanyDetail() {
         />
       )}
     </div>
+  );
+}
+
+function ProblemRow({
+  problem,
+  companySlug,
+  isSolved,
+  toggleSolved,
+  getNote,
+  diffBadge,
+  setNoteModal
+}: {
+  problem: Problem;
+  companySlug: string;
+  isSolved: (c: string, p: string) => boolean;
+  toggleSolved: (c: string, p: string) => void;
+  getNote: (c: string, p: string) => any;
+  diffBadge: (d: string) => React.ReactNode;
+  setNoteModal: (p: Problem) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const done = isSolved(companySlug, problem.slug);
+  const hasNote = !!getNote(companySlug, problem.slug);
+
+  return (
+    <>
+      <TableRow className={`transition-colors ${done ? "opacity-50 bg-muted/10" : "hover:bg-muted/20"}`}>
+        <TableCell>
+          <Checkbox checked={done} onCheckedChange={() => toggleSolved(companySlug, problem.slug)} />
+        </TableCell>
+        <TableCell>
+          <div className="flex items-center gap-2">
+            <a href={problem.url} target="_blank" rel="noopener noreferrer"
+              className={`font-medium hover:text-primary transition-colors inline-flex items-center gap-1.5 text-sm ${done ? "line-through text-muted-foreground" : ""}`}>
+              {problem.title}<ExternalLink className="h-3 w-3 opacity-40" />
+            </a>
+            <AIAnalysis title={problem.title} difficulty={problem.difficulty} url={problem.url} />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-5 w-5 rounded-full hover:bg-muted"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+            </Button>
+          </div>
+        </TableCell>
+        <TableCell>{diffBadge(problem.difficulty)}</TableCell>
+        <TableCell className="hidden md:table-cell">
+          <div className="flex flex-wrap gap-1">
+            {problem.topics && problem.topics.split(", ").slice(0, 3).map((t) => (
+              <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">{t}</Badge>
+            ))}
+            {problem.topics && problem.topics.split(", ").length > 3 && (
+              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">+{problem.topics.split(", ").length - 3}</Badge>
+            )}
+          </div>
+        </TableCell>
+        <TableCell className="text-right">
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setNoteModal(problem)}>
+            {hasNote ? <FileText className="h-4 w-4 text-primary" /> : <StickyNote className="h-4 w-4 text-muted-foreground" />}
+          </Button>
+        </TableCell>
+      </TableRow>
+      {isOpen && (
+        <TableRow className="bg-muted/5 hover:bg-muted/5 border-t-0">
+          <TableCell colSpan={5} className="p-0">
+            <div className="px-4 py-2 border-b animate-in slide-in-from-top-2 fade-in duration-200">
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground mb-1">
+                <span className="bg-primary/10 text-primary px-1.5 py-0.5 rounded">Similar Problems</span>
+              </div>
+              <SimilarProblems problemSlug={problem.slug} />
+            </div>
+          </TableCell>
+        </TableRow>
+      )}
+    </>
   );
 }
