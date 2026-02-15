@@ -46,8 +46,8 @@ export function AIAnalysis({ title, difficulty, url }: AIAnalysisProps) {
           AI Analysis
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-xl max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden border-indigo-500/20">
-        <div className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 p-6 border-b border-indigo-500/10">
+      <DialogContent className="sm:max-w-xl h-[80vh] flex flex-col p-0 gap-0 overflow-hidden border-indigo-500/20">
+        <div className="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 p-6 border-b border-indigo-500/10 shrink-0">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl text-indigo-700 dark:text-indigo-300">
               <Sparkles className="h-5 w-5" />
@@ -56,7 +56,7 @@ export function AIAnalysis({ title, difficulty, url }: AIAnalysisProps) {
           </DialogHeader>
         </div>
         
-        <ScrollArea className="flex-1 p-6 h-[60vh]">
+        <ScrollArea className="flex-1 p-6">
           <div className="space-y-4">
             {loading ? (
               <div className="flex flex-col items-center justify-center py-12 space-y-4 text-muted-foreground min-h-[300px]">
