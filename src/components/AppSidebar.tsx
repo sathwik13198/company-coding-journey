@@ -155,43 +155,34 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
 
-        {/* Creator credit chip — spinning gradient border */}
+        {/* Creator credit chip */}
         <style>{`
           @keyframes creator-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-          .creator-outer {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            padding-top: 6px;
-          }
+          .creator-outer { display: flex; justify-content: center; padding-top: 6px; }
           .creator-border {
             position: relative;
             border-radius: 999px;
-            padding: 1.5px;
+            padding: 1px;
             overflow: hidden;
           }
           .creator-border-bg {
             position: absolute;
-            inset: -60%;
-            background: conic-gradient(from 0deg, #FF6B35 0%, #00C8B4 40%, #FF6B35 80%, transparent 100%);
-            animation: creator-spin 2s linear infinite;
+            inset: -80%;
+            background: conic-gradient(from 0deg, rgba(255,107,53,0.7) 0%, rgba(0,200,180,0.5) 45%, transparent 55%, rgba(255,107,53,0.7) 100%);
+            animation: creator-spin 5s linear infinite;
           }
           .creator-inner {
             position: relative;
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            padding: 3px 12px;
+            padding: 3px 10px;
             border-radius: 999px;
             background: #0f0f11;
-            transition: background 0.25s;
+            transition: background 0.3s;
           }
-          .creator-inner:hover {
-            background: rgba(255,107,53,0.1);
-          }
-          .creator-inner:hover .creator-name {
-            color: #fff;
-          }
+          .creator-inner:hover { background: rgba(255,107,53,0.08); }
+          .creator-inner:hover .creator-name { color: rgba(255,255,255,0.9); }
         `}</style>
         <div className="creator-outer">
           <div className="creator-border">
@@ -202,8 +193,8 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
               rel="noopener noreferrer"
               className="creator-inner"
             >
-              <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
-              <span className="creator-name text-[10px] font-bold transition-colors duration-200" style={{ color: 'rgba(255,255,255,0.65)' }}>Sathwik</span>
+              <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>Built by</span>
+              <span className="creator-name text-[10px] font-semibold transition-colors duration-300" style={{ color: 'rgba(255,255,255,0.55)' }}>Sathwik</span>
             </a>
           </div>
         </div>

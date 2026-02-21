@@ -434,34 +434,34 @@ export default function Auth() {
               </>
             )}
 
-            {/* Creator credit chip — correct spinning border */}
+            {/* Creator credit chip */}
             <style>{`
               @keyframes auth-creator-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
               .auth-creator-outer { display: flex; justify-content: center; margin-top: 2rem; }
               .auth-creator-border {
                 position: relative;
                 border-radius: 999px;
-                padding: 1.5px;
+                padding: 1px;
                 overflow: hidden;
               }
               .auth-creator-border-bg {
                 position: absolute;
-                inset: -60%;
-                background: conic-gradient(from 0deg, #FF6B35 0%, #00C8B4 40%, #FF6B35 80%, transparent 100%);
-                animation: auth-creator-spin 2s linear infinite;
+                inset: -80%;
+                background: conic-gradient(from 0deg, rgba(255,107,53,0.7) 0%, rgba(0,200,180,0.5) 45%, transparent 55%, rgba(255,107,53,0.7) 100%);
+                animation: auth-creator-spin 5s linear infinite;
               }
               .auth-creator-inner {
                 position: relative;
                 display: inline-flex;
                 align-items: center;
                 gap: 6px;
-                padding: 4px 14px;
+                padding: 4px 12px;
                 border-radius: 999px;
                 background: #0C0C0F;
-                transition: background 0.25s;
+                transition: background 0.3s;
               }
-              .auth-creator-inner:hover { background: rgba(255,107,53,0.1); }
-              .auth-creator-inner:hover .auth-creator-name { color: #fff; }
+              .auth-creator-inner:hover { background: rgba(255,107,53,0.08); }
+              .auth-creator-inner:hover .auth-creator-name { color: rgba(255,255,255,0.9); }
             `}</style>
             <div className="auth-creator-outer">
               <div className="auth-creator-border">
@@ -472,8 +472,8 @@ export default function Auth() {
                   rel="noopener noreferrer"
                   className="auth-creator-inner"
                 >
-                  <span className="text-[11px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
-                  <span className="auth-creator-name text-[11px] font-bold transition-colors duration-200" style={{ color: 'rgba(255,255,255,0.65)' }}>Sathwik</span>
+                  <span className="text-[11px] tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>Built by</span>
+                  <span className="auth-creator-name text-[11px] font-semibold transition-colors duration-300" style={{ color: 'rgba(255,255,255,0.6)' }}>Sathwik</span>
                 </a>
               </div>
             </div>
