@@ -155,48 +155,17 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
 
-        {/* Creator credit chip */}
-        <style>{`
-          @keyframes creator-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-          .creator-outer { display: flex; justify-content: center; padding-top: 6px; }
-          .creator-border {
-            position: relative;
-            border-radius: 999px;
-            padding: 1px;
-            overflow: hidden;
-          }
-          .creator-border-bg {
-            position: absolute;
-            inset: -80%;
-            background: conic-gradient(from 0deg, rgba(255,107,53,0.7) 0%, rgba(0,200,180,0.5) 45%, transparent 55%, rgba(255,107,53,0.7) 100%);
-            animation: creator-spin 5s linear infinite;
-          }
-          .creator-inner {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
-            border-radius: 999px;
-            background: #0f0f11;
-            transition: background 0.3s;
-          }
-          .creator-inner:hover { background: rgba(255,107,53,0.08); }
-          .creator-inner:hover .creator-name { color: rgba(255,255,255,0.9); }
-        `}</style>
-        <div className="creator-outer">
-          <div className="creator-border">
-            <div className="creator-border-bg" />
-            <a
-              href="https://www.linkedin.com/in/sathwikpentapati/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="creator-inner"
-            >
-              <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.3)' }}>Built by</span>
-              <span className="creator-name text-[10px] font-semibold transition-colors duration-300" style={{ color: 'rgba(255,255,255,0.55)' }}>Sathwik</span>
-            </a>
-          </div>
+        {/* Creator credit */}
+        <div className="pt-2 flex justify-center">
+          <a
+            href="https://www.linkedin.com/in/sathwikpentapati/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-white/5 transition-colors"
+          >
+            <span className="text-[11px] text-white/30 tracking-wide font-medium">Built by</span>
+            <span className="text-[11px] text-white/50 group-hover:text-white transition-colors font-semibold">Sathwik</span>
+          </a>
         </div>
       </SidebarFooter>
     </Sidebar>
