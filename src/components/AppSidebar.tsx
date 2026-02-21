@@ -10,7 +10,6 @@ import {
   Bot,
   Users,
   ChevronRight,
-  Linkedin,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -156,50 +155,57 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
 
-        {/* Creator credit chip */}
+        {/* Creator credit chip — spinning gradient border */}
         <style>{`
-          @keyframes spin-border { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-          .creator-chip-wrap { position: relative; display: flex; justify-content: center; padding-top: 6px; }
-          .creator-chip-wrap::before {
-            content: '';
-            position: absolute;
-            inset: 6px calc(50% - 72px) 0;
+          @keyframes creator-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          .creator-outer {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            padding-top: 6px;
+          }
+          .creator-border {
+            position: relative;
             border-radius: 999px;
             padding: 1.5px;
-            background: conic-gradient(from 0deg, #FF6B35, #00C8B4, #FF6B35);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            animation: spin-border 2.5s linear infinite;
+            overflow: hidden;
           }
-          .creator-chip {
-            display: inline-flex; align-items: center; gap: 5px;
-            padding: 3px 12px; border-radius: 999px;
-            background: rgba(255,255,255,0.04);
-            backdrop-filter: blur(8px);
-            transition: background 0.2s, box-shadow 0.2s;
+          .creator-border-bg {
+            position: absolute;
+            inset: -60%;
+            background: conic-gradient(from 0deg, #FF6B35 0%, #00C8B4 40%, #FF6B35 80%, transparent 100%);
+            animation: creator-spin 2s linear infinite;
           }
-          .creator-chip:hover {
-            background: rgba(255,107,53,0.08);
-            box-shadow: 0 0 16px rgba(255,107,53,0.2);
+          .creator-inner {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 12px;
+            border-radius: 999px;
+            background: #0f0f11;
+            transition: background 0.25s;
+          }
+          .creator-inner:hover {
+            background: rgba(255,107,53,0.1);
+          }
+          .creator-inner:hover .creator-name {
+            color: #fff;
           }
         `}</style>
-        <div className="creator-chip-wrap">
-          <a
-            href="https://www.linkedin.com/in/sathwikpentapati/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="creator-chip group"
-          >
-            <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
-            <Linkedin className="h-2.5 w-2.5 flex-shrink-0" style={{ color: '#0A66C2' }} />
-            <span
-              className="text-[10px] font-bold group-hover:text-white transition-colors duration-200"
-              style={{ color: 'rgba(255,255,255,0.6)' }}
+        <div className="creator-outer">
+          <div className="creator-border">
+            <div className="creator-border-bg" />
+            <a
+              href="https://www.linkedin.com/in/sathwikpentapati/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="creator-inner"
             >
-              Sathwik
-            </span>
-          </a>
+              <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
+              <span className="creator-name text-[10px] font-bold transition-colors duration-200" style={{ color: 'rgba(255,255,255,0.65)' }}>Sathwik</span>
+            </a>
+          </div>
         </div>
       </SidebarFooter>
     </Sidebar>

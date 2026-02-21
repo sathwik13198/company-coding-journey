@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Code2, LogIn, UserPlus, ArrowRight, Loader2, CheckCircle2, Zap, Shield, TrendingUp, Eye, EyeOff, Linkedin } from "lucide-react";
+import { Code2, LogIn, UserPlus, ArrowRight, Loader2, CheckCircle2, Zap, Shield, TrendingUp, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const features = [
@@ -434,50 +434,48 @@ export default function Auth() {
               </>
             )}
 
-            {/* Creator credit chip */}
+            {/* Creator credit chip — correct spinning border */}
             <style>{`
-              @keyframes spin-border-auth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-              .auth-creator-wrap { position: relative; display: flex; justify-content: center; }
-              .auth-creator-wrap::before {
-                content: '';
-                position: absolute;
-                inset: 0 calc(50% - 76px) 0;
+              @keyframes auth-creator-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+              .auth-creator-outer { display: flex; justify-content: center; margin-top: 2rem; }
+              .auth-creator-border {
+                position: relative;
                 border-radius: 999px;
                 padding: 1.5px;
-                background: conic-gradient(from 0deg, #FF6B35, #00C8B4, #FF6B35);
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                animation: spin-border-auth 2.5s linear infinite;
+                overflow: hidden;
               }
-              .auth-creator-chip {
-                display: inline-flex; align-items: center; gap: 5px;
-                padding: 4px 14px; border-radius: 999px;
-                background: rgba(255,255,255,0.04);
-                backdrop-filter: blur(8px);
-                transition: background 0.2s, box-shadow 0.2s;
+              .auth-creator-border-bg {
+                position: absolute;
+                inset: -60%;
+                background: conic-gradient(from 0deg, #FF6B35 0%, #00C8B4 40%, #FF6B35 80%, transparent 100%);
+                animation: auth-creator-spin 2s linear infinite;
               }
-              .auth-creator-chip:hover {
-                background: rgba(255,107,53,0.08);
-                box-shadow: 0 0 20px rgba(255,107,53,0.2);
+              .auth-creator-inner {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 14px;
+                border-radius: 999px;
+                background: #0C0C0F;
+                transition: background 0.25s;
               }
+              .auth-creator-inner:hover { background: rgba(255,107,53,0.1); }
+              .auth-creator-inner:hover .auth-creator-name { color: #fff; }
             `}</style>
-            <div className="mt-8 auth-creator-wrap">
-              <a
-                href="https://www.linkedin.com/in/sathwikpentapati/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="auth-creator-chip group"
-              >
-                <span className="text-[11px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
-                <Linkedin className="h-3 w-3 flex-shrink-0" style={{ color: '#0A66C2' }} />
-                <span
-                  className="text-[11px] font-bold group-hover:text-white transition-colors duration-200"
-                  style={{ color: 'rgba(255,255,255,0.65)' }}
+            <div className="auth-creator-outer">
+              <div className="auth-creator-border">
+                <div className="auth-creator-border-bg" />
+                <a
+                  href="https://www.linkedin.com/in/sathwikpentapati/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="auth-creator-inner"
                 >
-                  Sathwik
-                </span>
-              </a>
+                  <span className="text-[11px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
+                  <span className="auth-creator-name text-[11px] font-bold transition-colors duration-200" style={{ color: 'rgba(255,255,255,0.65)' }}>Sathwik</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
