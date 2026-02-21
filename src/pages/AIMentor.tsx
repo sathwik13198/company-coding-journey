@@ -24,6 +24,7 @@ export default function AIMentor() {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (activeMessages.length === 0) return;
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
@@ -33,6 +34,12 @@ export default function AIMentor() {
     e.preventDefault();
     if (!input.trim() || loading) return;
     sendMessage(input);
+    setInput("");
+  };
+
+  const handlePromptClick = (prompt: string) => {
+    if (loading) return;
+    sendMessage(prompt);
     setInput("");
   };
 
@@ -97,15 +104,80 @@ export default function AIMentor() {
           <ScrollArea className="flex-1 p-4 md:p-6">
             <div className="space-y-6 pb-4 max-w-4xl mx-auto">
               {activeMessages.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-                  <div className="h-20 w-20 bg-gradient-to-tr from-orange-500/20 to-amber-500/10 rounded-[2rem] flex items-center justify-center mb-2 shadow-inner ring-1 ring-orange-500/20">
+                <div className="flex flex-col items-center justify-center py-12 text-center space-y-6 max-w-2xl mx-auto">
+                  <div className="h-20 w-20 bg-gradient-to-tr from-orange-500/20 to-amber-500/10 rounded-[2rem] flex items-center justify-center shadow-inner ring-1 ring-orange-500/20">
                     <Bot className="h-10 w-10 text-orange-400" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Welcome to your AI Mentor!</h3>
-                    <p className="text-muted-foreground text-sm max-w-md mx-auto mt-3 leading-relaxed">
-                      Ask me for coding strategies, concept explanations, or specific question recommendations like "Give me 3 medium array questions for Amazon".
+                    <p className="text-muted-foreground text-sm max-w-md mx-auto mt-2 leading-relaxed">
+                      Ask for interview advice, concept explanations, or problem recommendations — or pick a prompt below to get started.
                     </p>
+                  </div>
+
+                  {/* Example prompts */}
+                  <div className="w-full space-y-4 text-left">
+                    {[
+                      {
+                        label: "Company Lists",
+                        icon: "🏢",
+                        prompts: [
+                          "Give me Amazon's top 10 DP questions",
+                          "What are the most common Google interview questions?",
+                          "Show me Microsoft's top 5 Hard questions",
+                          "Top Meta system design problems to practice",
+                        ],
+                      },
+                      {
+                        label: "Topic Drills",
+                        icon: "🎯",
+                        prompts: [
+                          "Give me 5 medium sliding window problems",
+                          "Best tree problems for beginners",
+                          "Top 5 graph problems every engineer should know",
+                          "Recommend binary search questions by difficulty",
+                        ],
+                      },
+                      {
+                        label: "Strategy & Concepts",
+                        icon: "🧠",
+                        prompts: [
+                          "How do I approach dynamic programming problems?",
+                          "Explain when to use BFS vs DFS",
+                          "Tips for solving two-pointer problems fast",
+                          "What topics should I focus on for FAANG interviews?",
+                        ],
+                      },
+                    ].map((category) => (
+                      <div key={category.label}>
+                        <p className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground/50 mb-2 px-1">
+                          {category.icon} {category.label}
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {category.prompts.map((prompt) => (
+                            <button
+                              key={prompt}
+                              onClick={() => handlePromptClick(prompt)}
+                              className="text-left text-sm px-4 py-3 rounded-2xl border transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] group"
+                              style={{
+                                background: 'rgba(255,107,53,0.04)',
+                                borderColor: 'rgba(255,107,53,0.15)',
+                              }}
+                              onMouseEnter={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,107,53,0.10)';
+                                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,107,53,0.35)';
+                              }}
+                              onMouseLeave={e => {
+                                (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,107,53,0.04)';
+                                (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,107,53,0.15)';
+                              }}
+                            >
+                              <span className="text-foreground/80 group-hover:text-foreground transition-colors leading-snug">{prompt}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (
@@ -169,7 +241,7 @@ export default function AIMentor() {
                 placeholder="Ask for interview advice or question recommendations..."
                 disabled={loading}
                 className="flex-1 bg-card/60 border-border/50 focus-visible:ring-orange-500/40 focus-visible:ring-2 pr-14 rounded-full h-14 shadow-sm text-[15px] transition-all group-hover:border-orange-500/30"
-                autoFocus
+                autoFocus={false}
               />
               <Button 
                 type="submit" 
