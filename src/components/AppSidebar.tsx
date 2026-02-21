@@ -10,6 +10,7 @@ import {
   Bot,
   Users,
   ChevronRight,
+  Linkedin,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -154,6 +155,21 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           </span>
           <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
+
+        {/* Creator credit */}
+        <div className="pt-1 flex items-center justify-center gap-1" style={{ color: 'rgba(255,255,255,0.2)' }}>
+          <span className="text-[10px] tracking-wide">Built by</span>
+          <a
+            href="https://www.linkedin.com/in/sathwikpentapati/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[10px] font-semibold group transition-all duration-200"
+            style={{ color: 'rgba(255,255,255,0.35)' }}
+          >
+            <Linkedin className="h-2.5 w-2.5 group-hover:scale-110 transition-transform duration-200" style={{ color: '#0A66C2' }} />
+            <span className="group-hover:text-white transition-colors duration-200">Sathwik</span>
+          </a>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

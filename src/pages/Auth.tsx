@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Code2, LogIn, UserPlus, ArrowRight, Loader2, CheckCircle2, Zap, Shield, TrendingUp, Eye, EyeOff } from "lucide-react";
+import { Code2, LogIn, UserPlus, ArrowRight, Loader2, CheckCircle2, Zap, Shield, TrendingUp, Eye, EyeOff, Linkedin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const features = [
@@ -433,6 +433,24 @@ export default function Auth() {
                 </p>
               </>
             )}
+
+            {/* Creator credit */}
+            <div className="mt-8 flex items-center justify-center gap-1.5" style={{ color: 'rgba(255,255,255,0.2)' }}>
+              <span className="text-[11px] tracking-wide">Built by</span>
+              <a
+                href="https://www.linkedin.com/in/sathwikpentapati/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold transition-all duration-200 hover:gap-1.5 group"
+                style={{ color: 'rgba(255,255,255,0.45)' }}
+              >
+                <Linkedin
+                  className="h-3 w-3 transition-all duration-200 group-hover:scale-110"
+                  style={{ color: '#0A66C2' }}
+                />
+                <span className="group-hover:text-white transition-colors duration-200">Sathwik</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
