@@ -58,7 +58,7 @@ export default function AIMentor() {
         }
       }
       return (
-        <div key={index} className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-indigo-700 dark:prose-headings:text-indigo-300 prose-p:leading-relaxed">
+        <div key={index} className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-orange-700 dark:prose-headings:text-orange-400 prose-p:leading-relaxed">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {part}
           </ReactMarkdown>
@@ -72,7 +72,7 @@ export default function AIMentor() {
       <div className="flex items-center justify-between mb-4 shrink-0 px-2 mt-2">
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            <Sparkles className="h-7 w-7 text-indigo-500" />
+            <Sparkles className="h-7 w-7 text-orange-400" />
             AI Mentor
           </h1>
           <p className="text-muted-foreground mt-1">Get personalized guidance and practice questions</p>
@@ -84,7 +84,7 @@ export default function AIMentor() {
               Clear Current Chat
             </Button>
           )}
-          <Button size="sm" onClick={createNewSession} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-4">
+          <Button size="sm" onClick={createNewSession} className="text-white rounded-full px-4" style={{ background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' }}>
             <Plus className="h-4 w-4 mr-2" />
             New Chat
           </Button>
@@ -98,11 +98,11 @@ export default function AIMentor() {
             <div className="space-y-6 pb-4 max-w-4xl mx-auto">
               {activeMessages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-                  <div className="h-20 w-20 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-[2rem] flex items-center justify-center mb-2 shadow-inner ring-1 ring-indigo-500/20">
-                    <Bot className="h-10 w-10 text-indigo-500" />
+                  <div className="h-20 w-20 bg-gradient-to-tr from-orange-500/20 to-amber-500/10 rounded-[2rem] flex items-center justify-center mb-2 shadow-inner ring-1 ring-orange-500/20">
+                    <Bot className="h-10 w-10 text-orange-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">Welcome to your AI Mentor!</h3>
+                    <h3 className="text-xl font-semibold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">Welcome to your AI Mentor!</h3>
                     <p className="text-muted-foreground text-sm max-w-md mx-auto mt-3 leading-relaxed">
                       Ask me for coding strategies, concept explanations, or specific question recommendations like "Give me 3 medium array questions for Amazon".
                     </p>
@@ -118,18 +118,18 @@ export default function AIMentor() {
                   >
                     <div className={`shrink-0 h-10 w-10 rounded-2xl flex items-center justify-center shadow-sm ${
                       message.role === "user" 
-                        ? "bg-indigo-600 text-white" 
-                        : "bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20"
-                    }`}>
+                        ? "text-white" 
+                        : "bg-gradient-to-br from-orange-500/10 to-amber-500/10 text-orange-400 border border-orange-500/20"
+                    }`} style={message.role === "user" ? { background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' } : undefined}>
                       {message.role === "user" ? <User className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
                     </div>
                     
                     <div className={`space-y-1.5 ${message.role === "user" ? "items-end text-right" : ""}`}>
                       <div className={`py-3 px-5 ${
                         message.role === "user" 
-                          ? "bg-indigo-600 text-white rounded-[24px] rounded-tr-md inline-block text-left shadow-md" 
+                          ? "text-white rounded-[24px] rounded-tr-md inline-block text-left shadow-md" 
                           : "bg-card/60 backdrop-blur-sm border border-border/50 rounded-[24px] rounded-tl-md w-full shadow-sm"
-                      }`}>
+                      }`} style={message.role === "user" ? { background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' } : undefined}>
                         {message.role === "user" ? (
                           <p className="text-[15px] whitespace-pre-wrap leading-relaxed">{message.content}</p>
                         ) : (
@@ -148,11 +148,11 @@ export default function AIMentor() {
               
               {loading && (
                 <div className="flex gap-4 max-w-[85%] mr-auto">
-                  <div className="shrink-0 h-10 w-10 rounded-2xl bg-gradient-to-br from-indigo-500/10 to-purple-500/10 text-indigo-500 border border-indigo-500/20 flex items-center justify-center shadow-sm">
+                  <div className="shrink-0 h-10 w-10 rounded-2xl bg-gradient-to-br from-orange-500/10 to-amber-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center shadow-sm">
                     <Bot className="h-5 w-5" />
                   </div>
                   <div className="bg-card/60 backdrop-blur-sm border border-border/50 rounded-[24px] rounded-tl-md py-4 px-5 flex items-center gap-3 shadow-sm">
-                    <Loader2 className="h-4 w-4 animate-spin text-indigo-500" />
+                    <Loader2 className="h-4 w-4 animate-spin text-orange-400" />
                     <span className="text-[15px] text-muted-foreground font-medium animate-pulse">Mentor is thinking...</span>
                   </div>
                 </div>
@@ -168,14 +168,15 @@ export default function AIMentor() {
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ask for interview advice or question recommendations..."
                 disabled={loading}
-                className="flex-1 bg-card/60 border-border/50 focus-visible:ring-indigo-500 focus-visible:ring-2 pr-14 rounded-full h-14 shadow-sm text-[15px] transition-all group-hover:border-indigo-500/30"
+                className="flex-1 bg-card/60 border-border/50 focus-visible:ring-orange-500/40 focus-visible:ring-2 pr-14 rounded-full h-14 shadow-sm text-[15px] transition-all group-hover:border-orange-500/30"
                 autoFocus
               />
               <Button 
                 type="submit" 
                 disabled={loading || !input.trim()} 
                 size="icon"
-                className="absolute right-2 top-2 h-10 w-10 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md transition-all active:scale-95 disabled:opacity-50 hover:shadow-indigo-500/25"
+                className="absolute right-2 top-2 h-10 w-10 rounded-full text-white shadow-md transition-all active:scale-95 disabled:opacity-50"
+                style={{ background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' }}
               >
                 <Send className="h-4 w-4" />
               </Button>
@@ -198,13 +199,13 @@ export default function AIMentor() {
                   key={session.id}
                   className={`group flex items-center justify-between p-3 rounded-2xl cursor-pointer transition-all ${
                     activeSessionId === session.id
-                      ? "bg-indigo-500/10 text-indigo-500 font-medium"
+                      ? "bg-orange-500/10 text-orange-500 font-medium"
                       : "hover:bg-accent/50 text-muted-foreground"
                   }`}
                   onClick={() => setActiveSessionId(session.id)}
                 >
                   <div className="flex items-center gap-3 overflow-hidden">
-                    <MessageSquare className={`h-4 w-4 shrink-0 ${activeSessionId === session.id ? "text-indigo-500" : "text-muted-foreground/60"}`} />
+                    <MessageSquare className={`h-4 w-4 shrink-0 ${activeSessionId === session.id ? "text-orange-500" : "text-muted-foreground/60"}`} />
                     <div className="truncate text-sm">
                       {session.title || "New Chat"}
                     </div>

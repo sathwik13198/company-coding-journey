@@ -13,6 +13,8 @@ import ProgressPage from "@/pages/ProgressPage";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
 import AIMentor from "@/pages/AIMentor";
+import CollaborativeRooms from "@/pages/CollaborativeRooms";
+import RoomView from "@/pages/RoomView";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +49,8 @@ const App = () => (
               <Route path="/progress" element={<ProgressPage />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/ai-mentor" element={<AIMentor />} />
+              <Route path="/rooms" element={<CollaborativeRooms />} />
+              <Route path="/rooms/:id" element={<RoomView />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -19,11 +19,11 @@ export function AppLayout() {
             onExport={progressApi.exportProgress}
             onImport={progressApi.importProgress}
           />
-          <main className="flex-1 overflow-auto">
-            <header className="sticky top-0 z-30 flex h-12 items-center border-b border-border bg-background/80 backdrop-blur px-4">
+          <main className="flex-1 overflow-hidden flex flex-col">
+            <header className="sticky top-0 z-30 flex h-12 shrink-0 items-center border-b border-border bg-background/80 backdrop-blur px-4">
               <SidebarTrigger />
             </header>
-            <div className="p-4 md:p-6 lg:p-8">
+            <div className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
               <Outlet />
             </div>
           </main>

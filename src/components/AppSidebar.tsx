@@ -7,7 +7,9 @@ import {
   Code2,
   LogOut,
   User,
-  Bot
+  Bot,
+  Users,
+  ChevronRight,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -16,24 +18,23 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { Separator } from "@/components/ui/separator";
+import { Link } from "react-router-dom";
 
 const navItems = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "Companies", url: "/companies", icon: Building2 },
-  { title: "Progress", url: "/progress", icon: BarChart3 },
-  { title: "AI Mentor", url: "/ai-mentor", icon: Bot },
-  { title: "Profile", url: "/profile", icon: User },
+  { title: "Dashboard",   url: "/",          icon: LayoutDashboard, color: "text-orange-400",  bg: "bg-orange-500/10"  },
+  { title: "Companies",   url: "/companies", icon: Building2,       color: "text-amber-400",   bg: "bg-amber-500/10"   },
+  { title: "Progress",    url: "/progress",  icon: BarChart3,       color: "text-teal-400",    bg: "bg-teal-500/10"    },
+  { title: "Study Rooms", url: "/rooms",     icon: Users,           color: "text-cyan-400",    bg: "bg-cyan-500/10"    },
+  { title: "AI Mentor",   url: "/ai-mentor", icon: Bot,             color: "text-rose-400",    bg: "bg-rose-500/10"    },
+  { title: "Profile",     url: "/profile",   icon: User,            color: "text-yellow-400",  bg: "bg-yellow-500/10"  },
 ];
 
 interface AppSidebarProps {
@@ -46,61 +47,84 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
   const { user, signOut } = useAuth();
 
   return (
-    <Sidebar className="border-r border-border">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center gap-2">
-          <Code2 className="h-6 w-6 text-primary" />
-          <span className="text-lg font-bold tracking-tight">LeetTracker</span>
-        </div>
-        {user && (
-          <p className="text-xs text-muted-foreground mt-1 truncate">{user.email}</p>
-        )}
+    <Sidebar className="border-r border-border/50">
+      {/* Logo */}
+      <SidebarHeader className="px-5 py-5">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="h-8 w-8 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20 transition-all group-hover:scale-110"
+               style={{ background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' }}>
+            <Code2 className="h-4 w-4 text-white" />
+          </div>
+          <div>
+            <span className="text-[15px] font-bold tracking-tight" style={{ color: '#FF6B35' }}>
+              LeetTracker
+            </span>
+            {user && (
+              <p className="text-[11px] text-muted-foreground/70 truncate max-w-[140px]">{user.email}</p>
+            )}
+          </div>
+        </Link>
       </SidebarHeader>
 
-      <Separator />
-
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+      <SidebarContent className="px-3 gap-1">
+        {/* Navigation */}
+        <SidebarGroup className="p-0">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/40 font-semibold px-3 pb-2 pt-1">
+            Navigation
+          </p>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-0.5">
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      end={item.url === "/"}
-                      className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                      activeClassName="bg-accent text-primary font-medium"
-                    >
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </NavLink>
-                  </SidebarMenuButton>
+                  <NavLink
+                    to={item.url}
+                    end={item.url === "/"}
+                    className="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground/70 hover:text-foreground hover:bg-accent/60 transition-all duration-150"
+                    activeClassName="bg-gradient-to-r from-orange-500/15 to-orange-500/5 text-foreground font-semibold border border-orange-500/20 shadow-sm"
+                  >
+                    <span className={`flex h-7 w-7 items-center justify-center rounded-lg ${item.bg} transition-all group-hover:scale-110`}>
+                      <item.icon className={`h-3.5 w-3.5 ${item.color}`} />
+                    </span>
+                    <span className="text-[13px] tracking-tight">{item.title}</span>
+                    <ChevronRight className="ml-auto h-3 w-3 opacity-0 group-hover:opacity-40 transition-opacity" />
+                  </NavLink>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Data</SidebarGroupLabel>
+        {/* Divider */}
+        <div className="mx-3 my-1 h-px bg-border/40" />
+
+        {/* Data */}
+        <SidebarGroup className="p-0">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground/40 font-semibold px-3 pb-2 pt-1">
+            Data
+          </p>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-0.5">
               <SidebarMenuItem>
-                <SidebarMenuButton onClick={onExport} className="flex items-center gap-3 px-3 py-2 cursor-pointer">
-                  <Download className="h-4 w-4" />
-                  <span>Export Progress</span>
-                </SidebarMenuButton>
+                <button
+                  onClick={onExport}
+                  className="group flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground/70 hover:text-foreground hover:bg-accent/60 transition-all duration-150"
+                >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-500/10">
+                    <Download className="h-3.5 w-3.5 text-teal-400" />
+                  </span>
+                  <span className="text-[13px] tracking-tight">Export Progress</span>
+                </button>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
+                <button
                   onClick={() => fileRef.current?.click()}
-                  className="flex items-center gap-3 px-3 py-2 cursor-pointer"
+                  className="group flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-muted-foreground/70 hover:text-foreground hover:bg-accent/60 transition-all duration-150"
                 >
-                  <Upload className="h-4 w-4" />
-                  <span>Import Progress</span>
-                </SidebarMenuButton>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10">
+                    <Upload className="h-3.5 w-3.5 text-amber-400" />
+                  </span>
+                  <span className="text-[13px] tracking-tight">Import Progress</span>
+                </button>
                 <input
                   ref={fileRef}
                   type="file"
@@ -117,11 +141,18 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 space-y-2">
+      <SidebarFooter className="px-3 py-4 space-y-1 border-t border-border/30">
         <ThemeToggle />
-        <Button variant="ghost" size="sm" className="w-full justify-start text-muted-foreground" onClick={signOut}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Sign Out
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full justify-start gap-3 text-muted-foreground/70 hover:text-red-400 hover:bg-red-500/10 rounded-xl px-3 py-2.5 h-auto transition-all duration-150"
+          onClick={signOut}
+        >
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-500/10">
+            <LogOut className="h-3.5 w-3.5 text-red-400" />
+          </span>
+          <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
       </SidebarFooter>
     </Sidebar>

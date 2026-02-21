@@ -123,15 +123,15 @@ export default function Dashboard() {
 
       {/* AI Mentor Call to Action */}
       <Link to="/ai-mentor" className="block">
-        <Card className="border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 hover:border-indigo-500/60 transition-all cursor-pointer shadow-sm relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <Card className="border-orange-500/30 hover:border-orange-500/60 transition-all cursor-pointer shadow-sm relative overflow-hidden group" style={{ background: 'linear-gradient(135deg, rgba(255,107,53,0.08), rgba(255,180,100,0.05))' }}>
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(135deg, rgba(255,107,53,0.06), rgba(255,180,100,0.04))' }} />
           <CardContent className="flex items-center justify-between p-6">
             <div className="flex items-center gap-4">
-              <div className="h-12 w-12 rounded-full bg-indigo-500/20 text-indigo-500 flex items-center justify-center border border-indigo-500/30">
+              <div className="h-12 w-12 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center border border-orange-500/30">
                 <Bot className="h-6 w-6" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
+                <h3 className="text-xl font-bold text-orange-600 dark:text-orange-400 flex items-center gap-2">
                   Meet Your AI Mentor <Sparkles className="h-4 w-4" />
                 </h3>
                 <p className="text-sm text-foreground/80 mt-1 max-w-md">
@@ -139,7 +139,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-            <div className="hidden sm:flex px-4 py-2 rounded-full bg-indigo-500 text-white font-medium text-sm transition-transform group-hover:scale-105">
+            <div className="hidden sm:flex px-4 py-2 rounded-full text-white font-medium text-sm transition-transform group-hover:scale-105" style={{ background: 'linear-gradient(135deg, #FF6B35, #E84A1D)' }}>
               Start Chatting
             </div>
           </CardContent>

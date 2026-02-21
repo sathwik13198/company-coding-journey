@@ -16,9 +16,10 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
+import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight, GitBranch } from "lucide-react";
 import { SimilarProblems } from "@/components/SimilarProblems";
 import { AIAnalysis } from "@/components/AIAnalysis";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const PAGE_SIZE = 100;
 
@@ -262,26 +263,36 @@ function ProblemRow({
               {problem.title}<ExternalLink className="h-3 w-3 opacity-40" />
             </a>
             <AIAnalysis title={problem.title} difficulty={problem.difficulty} url={problem.url} />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-5 w-5 rounded-full hover:bg-muted"
+            <button
+              className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-colors cursor-pointer"
               onClick={() => setIsOpen(!isOpen)}
             >
-              <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
-            </Button>
+              <GitBranch className="h-2.5 w-2.5" />
+              {isOpen ? "Hide" : "Similar"}
+            </button>
           </div>
         </TableCell>
         <TableCell>{diffBadge(problem.difficulty)}</TableCell>
         <TableCell className="hidden md:table-cell">
-          <div className="flex flex-wrap gap-1">
-            {problem.topics && problem.topics.split(", ").slice(0, 3).map((t) => (
-              <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">{t}</Badge>
-            ))}
-            {problem.topics && problem.topics.split(", ").length > 3 && (
-              <Badge variant="secondary" className="text-[10px] px-1.5 py-0">+{problem.topics.split(", ").length - 3}</Badge>
-            )}
-          </div>
+          <TooltipProvider>
+            <div className="flex flex-wrap gap-1">
+              {problem.topics && problem.topics.split(", ").slice(0, 3).map((t) => (
+                <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">{t}</Badge>
+              ))}
+              {problem.topics && problem.topics.split(", ").length > 3 && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 cursor-pointer hover:bg-orange-500/20 hover:text-orange-400 transition-colors">
+                      +{problem.topics.split(", ").length - 3}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-xs">
+                    <p className="text-xs">{problem.topics.split(", ").slice(3).join(" · ")}</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+          </TooltipProvider>
         </TableCell>
         <TableCell className="text-right">
           <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setNoteModal(problem)}>
