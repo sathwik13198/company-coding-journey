@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { companyList, totalProblems, getDifficultyCount } from "@/lib/data";
 import { useProgressCtx } from "@/components/AppLayout";
 import { Link } from "react-router-dom";
-import { Flame, Target, TrendingUp, BookOpen, ExternalLink, Calendar } from "lucide-react";
+import { Flame, Target, TrendingUp, BookOpen, ExternalLink, Calendar, Bot, Sparkles } from "lucide-react";
 import {
   PieChart,
   Pie,
@@ -120,6 +120,31 @@ export default function Dashboard() {
           </Card>
         </a>
       ) : null}
+
+      {/* AI Mentor Call to Action */}
+      <Link to="/ai-mentor" className="block">
+        <Card className="border-indigo-500/30 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 hover:border-indigo-500/60 transition-all cursor-pointer shadow-sm relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <CardContent className="flex items-center justify-between p-6">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-full bg-indigo-500/20 text-indigo-500 flex items-center justify-center border border-indigo-500/30">
+                <Bot className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-indigo-700 dark:text-indigo-300 flex items-center gap-2">
+                  Meet Your AI Mentor <Sparkles className="h-4 w-4" />
+                </h3>
+                <p className="text-sm text-foreground/80 mt-1 max-w-md">
+                  Stuck on a problem or need study recommendations? Chat with your personalized AI mentor right now.
+                </p>
+              </div>
+            </div>
+            <div className="hidden sm:flex px-4 py-2 rounded-full bg-indigo-500 text-white font-medium text-sm transition-transform group-hover:scale-105">
+              Start Chatting
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

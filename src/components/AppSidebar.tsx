@@ -7,6 +7,7 @@ import {
   Code2,
   LogOut,
   User,
+  Bot
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -31,6 +32,7 @@ const navItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Companies", url: "/companies", icon: Building2 },
   { title: "Progress", url: "/progress", icon: BarChart3 },
+  { title: "AI Mentor", url: "/ai-mentor", icon: Bot },
   { title: "Profile", url: "/profile", icon: User },
 ];
 
