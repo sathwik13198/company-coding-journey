@@ -156,18 +156,49 @@ export function AppSidebar({ onExport, onImport }: AppSidebarProps) {
           <span className="text-[13px] tracking-tight">Sign Out</span>
         </Button>
 
-        {/* Creator credit */}
-        <div className="pt-1 flex items-center justify-center gap-1" style={{ color: 'rgba(255,255,255,0.2)' }}>
-          <span className="text-[10px] tracking-wide">Built by</span>
+        {/* Creator credit chip */}
+        <style>{`
+          @keyframes spin-border { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          .creator-chip-wrap { position: relative; display: flex; justify-content: center; padding-top: 6px; }
+          .creator-chip-wrap::before {
+            content: '';
+            position: absolute;
+            inset: 6px calc(50% - 72px) 0;
+            border-radius: 999px;
+            padding: 1.5px;
+            background: conic-gradient(from 0deg, #FF6B35, #00C8B4, #FF6B35);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: spin-border 2.5s linear infinite;
+          }
+          .creator-chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 12px; border-radius: 999px;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(8px);
+            transition: background 0.2s, box-shadow 0.2s;
+          }
+          .creator-chip:hover {
+            background: rgba(255,107,53,0.08);
+            box-shadow: 0 0 16px rgba(255,107,53,0.2);
+          }
+        `}</style>
+        <div className="creator-chip-wrap">
           <a
             href="https://www.linkedin.com/in/sathwikpentapati/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-[10px] font-semibold group transition-all duration-200"
-            style={{ color: 'rgba(255,255,255,0.35)' }}
+            className="creator-chip group"
           >
-            <Linkedin className="h-2.5 w-2.5 group-hover:scale-110 transition-transform duration-200" style={{ color: '#0A66C2' }} />
-            <span className="group-hover:text-white transition-colors duration-200">Sathwik</span>
+            <span className="text-[10px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
+            <Linkedin className="h-2.5 w-2.5 flex-shrink-0" style={{ color: '#0A66C2' }} />
+            <span
+              className="text-[10px] font-bold group-hover:text-white transition-colors duration-200"
+              style={{ color: 'rgba(255,255,255,0.6)' }}
+            >
+              Sathwik
+            </span>
           </a>
         </div>
       </SidebarFooter>

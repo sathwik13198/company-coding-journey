@@ -434,21 +434,49 @@ export default function Auth() {
               </>
             )}
 
-            {/* Creator credit */}
-            <div className="mt-8 flex items-center justify-center gap-1.5" style={{ color: 'rgba(255,255,255,0.2)' }}>
-              <span className="text-[11px] tracking-wide">Built by</span>
+            {/* Creator credit chip */}
+            <style>{`
+              @keyframes spin-border-auth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+              .auth-creator-wrap { position: relative; display: flex; justify-content: center; }
+              .auth-creator-wrap::before {
+                content: '';
+                position: absolute;
+                inset: 0 calc(50% - 76px) 0;
+                border-radius: 999px;
+                padding: 1.5px;
+                background: conic-gradient(from 0deg, #FF6B35, #00C8B4, #FF6B35);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                animation: spin-border-auth 2.5s linear infinite;
+              }
+              .auth-creator-chip {
+                display: inline-flex; align-items: center; gap: 5px;
+                padding: 4px 14px; border-radius: 999px;
+                background: rgba(255,255,255,0.04);
+                backdrop-filter: blur(8px);
+                transition: background 0.2s, box-shadow 0.2s;
+              }
+              .auth-creator-chip:hover {
+                background: rgba(255,107,53,0.08);
+                box-shadow: 0 0 20px rgba(255,107,53,0.2);
+              }
+            `}</style>
+            <div className="mt-8 auth-creator-wrap">
               <a
                 href="https://www.linkedin.com/in/sathwikpentapati/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-[11px] font-semibold transition-all duration-200 hover:gap-1.5 group"
-                style={{ color: 'rgba(255,255,255,0.45)' }}
+                className="auth-creator-chip group"
               >
-                <Linkedin
-                  className="h-3 w-3 transition-all duration-200 group-hover:scale-110"
-                  style={{ color: '#0A66C2' }}
-                />
-                <span className="group-hover:text-white transition-colors duration-200">Sathwik</span>
+                <span className="text-[11px] tracking-wide" style={{ color: 'rgba(255,255,255,0.35)' }}>Built by</span>
+                <Linkedin className="h-3 w-3 flex-shrink-0" style={{ color: '#0A66C2' }} />
+                <span
+                  className="text-[11px] font-bold group-hover:text-white transition-colors duration-200"
+                  style={{ color: 'rgba(255,255,255,0.65)' }}
+                >
+                  Sathwik
+                </span>
               </a>
             </div>
           </div>
