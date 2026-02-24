@@ -5,6 +5,7 @@ import { companyList, totalProblems, getDifficultyCount } from "@/lib/data";
 import { useProgressCtx } from "@/components/AppLayout";
 import { Link } from "react-router-dom";
 import { Flame, Target, TrendingUp, BookOpen, ExternalLink, Calendar, Bot, Sparkles } from "lucide-react";
+import { ProblemSearch } from "@/components/ProblemSearch";
 import {
   PieChart,
   Pie,
@@ -75,11 +76,14 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground mt-1">
-          Track your LeetCode interview prep across {companyList.length} companies
-        </p>
+      <div className="space-y-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
+            Track your LeetCode interview prep across {companyList.length} companies
+          </p>
+        </div>
+        <ProblemSearch />
       </div>
 
       {/* Daily Challenge */}

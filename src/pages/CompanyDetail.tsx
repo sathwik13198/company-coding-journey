@@ -19,6 +19,7 @@ import {
 import { ArrowLeft, ExternalLink, Search, StickyNote, FileText, ChevronLeft, ChevronRight, GitBranch } from "lucide-react";
 import { SimilarProblems } from "@/components/SimilarProblems";
 import { AIAnalysis } from "@/components/AIAnalysis";
+import { OfficialSolution } from "@/components/OfficialSolution";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const PAGE_SIZE = 100;
@@ -264,12 +265,13 @@ function ProblemRow({
             </a>
             <AIAnalysis title={problem.title} difficulty={problem.difficulty} url={problem.url} />
             <button
-              className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border border-orange-500/30 text-orange-400 hover:bg-orange-500/10 transition-all duration-150 cursor-pointer hover:border-orange-500/50 hover:scale-[1.03] active:scale-95"
               onClick={() => setIsOpen(!isOpen)}
             >
               <GitBranch className="h-2.5 w-2.5" />
               {isOpen ? "Hide" : "Similar"}
             </button>
+            <OfficialSolution titleSlug={problem.slug} title={problem.title} difficulty={problem.difficulty} />
           </div>
         </TableCell>
         <TableCell>{diffBadge(problem.difficulty)}</TableCell>
